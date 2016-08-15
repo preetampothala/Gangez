@@ -1,0 +1,70 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<dom-module id="gangez-contact">
+    <template>
+        <style>
+        :host {
+            display: block;
+        }
+        .contact-form{
+            @apply(--layout-horizontal);
+            @apply(--layout-flex);
+            @apply(--layout-wrap);
+            @apply(--layout-center);
+        }
+        .layout-2-1 > *{
+            width: calc(50% - 16px);
+            padding: 0px 16px;
+            box-sizing: border-box;
+        }
+        @media(max-width: 600px){
+          .layout-2-1 > *{
+              width: calc(100% - 16px);
+              padding: 0px 16px;
+              box-sizing: border-box;
+          }
+        }
+        .container{
+            padding: 0px 16px;
+        }
+        </style>
+        <div class="container">
+            <form is="iron-form" id="form" method="post" action="/form/handler" class="layout-2-1 flex layout horizontal wrap contact-form">
+                <paper-input class="form-input" label="Your Name"></paper-input>
+                <paper-input class="form-input" label="Business Name"></paper-input>
+                <gold-email-input class="form-input" label="Email"></gold-email-input>
+                <paper-input class="form-input" label="Phone Number"></paper-input>
+                <paper-input class="form-input" label="Existing Website URL (if applicable)"></paper-input>
+                <paper-input class="form-input" label="Your Role in Project (Designer, Project Manager, etc)"></paper-input>
+                <paper-input class="form-input" label="Project Due Date (if applicable)"></paper-input>
+                <paper-dropdown-menu class="form-input" label="Project Budget">
+                    <paper-menu class="dropdown-content">
+                        <paper-item>$500 - $2500</paper-item>
+                        <paper-item>$500 - $10000</paper-item>
+                    </paper-menu>
+                </paper-dropdown-menu>
+            </form>
+            <paper-button raised primary>Get a Qoute</paper-button>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        is: 'gangez-contact'
+    });
+    </script>
+</dom-module>

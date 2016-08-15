@@ -1,0 +1,168 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-layout/app-box/app-box.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="my-icons.html">
+<style is="custom-style" include="shared-styles"></style>
+<dom-module id="my-app">
+    <template>
+        <style>
+        :host {
+            display: block;
+        }
+        
+        .drawer-list {
+            margin: 0 20px;
+        }
+        
+        .drawer-list a {
+            display: block;
+            padding: 0 16px;
+            line-height: 40px;
+            text-decoration: none;
+            color: var(--primary-text-color);
+        }
+        
+        .drawer-list a.iron-selected {
+            color: black;
+            font-weight: bold;
+        }
+        
+        paper-tab[link] a {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-center);
+            color: var(--default-text-color);
+            text-decoration: none;
+            padding: 0px 12px;
+            font-size: 16px;
+        }
+        
+        [hidden] {
+            display: none !important;
+        }
+        
+        app-header {
+            color: #fff;
+            --app-header-background-rear-layer: {
+                background-color: #ef6c00;
+            }
+            ;
+        }
+        
+        #main-content {
+            padding: 0px 10%
+        }
+        @media:(max-width: 600px){
+            #main-content {
+                padding: 0px 16px;
+            }
+        }
+        </style>
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+        <app-drawer-layout force-narrow>
+            <app-drawer id="drawer">
+                <app-toolbar></app-toolbar>
+                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                    <a name="home" href="/home">Home</a>
+                    <a name="shopify-serives" href="/shopify-serives">Shopify Services</a>
+                    <a name="solutions" href="/solutions">E-commerce Solutions</a>
+                    <a name="pricing" href="/pricing">Pricing</a>
+                    <a name="contact" href="/contact">Contact</a>
+                </iron-selector>
+            </app-drawer>
+            <app-header-layout>
+                <app-header effects="waterfall">
+                    <app-toolbar sticky>
+                        <paper-icon-button class="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
+                        <div main-title><img src="../images/logo.png" sizing="contain" height="48px;" /></div>
+                        <paper-tabs hidden$="{{!wideLayout}}" selected="[[page]]" attr-for-selected="name">
+                            <paper-tab link>
+                                <a name="home" href="/home" class="link">Home</a>
+                            </paper-tab>
+                            <paper-tab link>
+                                <a name="shopify-serives" href="/shopify-serives" class="link">Shopify Services</a>
+                            </paper-tab>
+                            <paper-tab link>
+                                <a name="solutions" href="/solutions" class="link">E-commerce Solutions</a>
+                            </paper-tab>
+                            <paper-tab link>
+                                <a name="pricing" href="/pricing" class="link">Pricing</a>
+                            </paper-tab>
+                            <paper-tab link>
+                                <a name="contact" href="/contact" class="link">Contact</a>
+                            </paper-tab>
+                        </paper-tabs>
+                    </app-toolbar>
+                </app-header>
+                <div id="main-content" class="content">
+                    <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
+                        <gangez-home name="home"></gangez-home>
+                        <gangez-contact name="contact"></gangez-contact>
+                    </iron-pages>
+                </div>
+            </app-header-layout>
+        </app-drawer-layout>
+        <iron-media-query query="(min-width: 600px)" query-matches="{{wideLayout}}"></iron-media-query>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'my-app',
+
+        properties: {
+
+            page: {
+                type: String,
+                reflectToAttribute: true,
+                observer: '_pageChanged'
+            },
+            wideLayout: {
+                type: Boolean,
+                value: true,
+                observer: 'onLayoutChange'
+            },
+        },
+
+        observers: [
+            '_routePageChanged(routeData.page)'
+        ],
+
+        _routePageChanged: function(page) {
+            this.page = page || 'view1';
+        },
+        onLayoutChange: function(wide) {
+            var drawer = this.$.drawer;
+            if (wide && drawer.opened) {
+                drawer.opened = false;
+            }
+        },
+        _pageChanged: function(page) {
+            // load page import on demand.
+            this.importHref(
+                this.resolveUrl('gangez-' + page + '.html'), null, null, true);
+        }
+    });
+    </script>
+</dom-module>
